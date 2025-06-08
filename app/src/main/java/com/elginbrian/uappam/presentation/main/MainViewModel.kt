@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.elginbrian.uappam.data.model.Plant
+import com.elginbrian.uappam.data.repositoty.AuthRepository
 import com.elginbrian.uappam.data.repositoty.PlantRepository
 import com.elginbrian.uappam.data.response.ApiResponse
 import com.elginbrian.uappam.util.Resource
@@ -11,7 +12,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel(private val plantRepository: PlantRepository) : ViewModel() {
+class MainViewModel(
+    private val plantRepository: PlantRepository,
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _plants = MutableLiveData<Resource<List<Plant>>>()
     val plants: LiveData<Resource<List<Plant>>> = _plants
@@ -66,5 +70,9 @@ class MainViewModel(private val plantRepository: PlantRepository) : ViewModel() 
                 _deleteStatus.postValue(Resource.Error("Terjadi kesalahan jaringan: ${t.message}"))
             }
         })
+    }
+
+    fun logout() {
+        authRepository.logout()
     }
 }

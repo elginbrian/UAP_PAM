@@ -24,7 +24,7 @@ val repositoryModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel(get(), get()) }
     viewModel { AddItemViewModel(get()) }
     viewModel { DetailViewModel(get()) }
     viewModel { EditItemViewModel(get()) }
