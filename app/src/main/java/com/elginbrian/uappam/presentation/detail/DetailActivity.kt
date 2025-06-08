@@ -2,10 +2,10 @@ package com.elginbrian.uappam.presentation.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -15,6 +15,7 @@ import com.elginbrian.uappam.data.model.Plant
 import com.elginbrian.uappam.presentation.edit_item.EditItemActivity
 import com.elginbrian.uappam.util.Resource
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailActivity : AppCompatActivity() {
@@ -51,7 +52,8 @@ class DetailActivity : AppCompatActivity() {
         val plantName = intent.getStringExtra(EXTRA_PLANT_NAME)
 
         if (plantName == null) {
-            Toast.makeText(this, "Nama tanaman tidak valid", Toast.LENGTH_LONG).show()
+            val rootView = findViewById<View>(R.id.coordinator_layout)
+            Snackbar.make(rootView, "Nama tanaman tidak valid", Snackbar.LENGTH_LONG).show()
             finish()
             return
         }
@@ -77,10 +79,11 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun observePlantDetails() {
+        val rootView = findViewById<View>(R.id.coordinator_layout)
         viewModel.plantDetails.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    Toast.makeText(this, "Memuat detail...", Toast.LENGTH_SHORT).show()
+                    // Sebaiknya tampilkan ProgressBar di layout
                 }
                 is Resource.Success -> {
                     resource.data?.let { plant ->
@@ -88,7 +91,7 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
                 is Resource.Error -> {
-                    Toast.makeText(this, resource.message, Toast.LENGTH_LONG).show()
+                    Snackbar.make(rootView, resource.message ?: "Gagal memuat detail", Snackbar.LENGTH_LONG).show()
                 }
             }
         }

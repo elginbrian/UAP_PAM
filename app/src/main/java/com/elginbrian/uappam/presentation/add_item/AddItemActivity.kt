@@ -1,9 +1,9 @@
 package com.elginbrian.uappam.presentation.add_item
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.elginbrian.uappam.R
 import com.elginbrian.uappam.util.Resource
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AddItemActivity : AppCompatActivity() {
@@ -53,17 +54,20 @@ class AddItemActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
+        val rootView = findViewById<View>(R.id.main)
         viewModel.addPlantStatus.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    Toast.makeText(this, "Menambahkan...", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(rootView, "Menambahkan...", Snackbar.LENGTH_SHORT).show()
                 }
                 is Resource.Success -> {
-                    Toast.makeText(this, "Tanaman berhasil ditambahkan", Toast.LENGTH_LONG).show()
-                    finish()
+                    Snackbar.make(rootView, "Tanaman berhasil ditambahkan", Snackbar.LENGTH_LONG).show()
+                    rootView.postDelayed({
+                        finish()
+                    }, 1500)
                 }
                 is Resource.Error -> {
-                    Toast.makeText(this, "Gagal: ${resource.message}", Toast.LENGTH_LONG).show()
+                    Snackbar.make(rootView, "Gagal: ${resource.message}", Snackbar.LENGTH_LONG).show()
                 }
             }
         }

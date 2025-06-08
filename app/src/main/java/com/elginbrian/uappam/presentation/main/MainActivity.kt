@@ -2,10 +2,7 @@ package com.elginbrian.uappam.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +15,7 @@ import com.elginbrian.uappam.data.model.Plant
 import com.elginbrian.uappam.presentation.add_item.AddItemActivity
 import com.elginbrian.uappam.presentation.detail.DetailActivity
 import com.elginbrian.uappam.util.Resource
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -75,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.plants.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    Toast.makeText(this, "Memuat data...", Toast.LENGTH_SHORT).show()
+                    // Sebaiknya tampilkan ProgressBar
                 }
                 is Resource.Success -> {
                     resource.data?.let { plants ->
@@ -83,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 is Resource.Error -> {
-                    Toast.makeText(this, resource.message, Toast.LENGTH_LONG).show()
+                    Snackbar.make(recyclerView, resource.message ?: "Gagal memuat data", Snackbar.LENGTH_LONG).show()
                 }
             }
         }
@@ -96,11 +94,15 @@ class MainActivity : AppCompatActivity() {
                     // Bisa menampilkan loading indicator
                 }
                 is Resource.Success -> {
-                    Toast.makeText(this, "Tanaman berhasil dihapus", Toast.LENGTH_SHORT).show()
-                    viewModel.fetchPlants() // Refresh list setelah hapus
+                    Snackbar.make(recyclerView, "Tanaman berhasil dihapus", Snackbar.LENGTH_LONG)
+                        .setAction("Urungkan") {
+                            // viewModel.undoDelete()
+                        }
+                        .show()
+                    viewModel.fetchPlants()
                 }
                 is Resource.Error -> {
-                    Toast.makeText(this, resource.message, Toast.LENGTH_LONG).show()
+                    Snackbar.make(recyclerView, resource.message ?: "Gagal menghapus", Snackbar.LENGTH_LONG).show()
                 }
             }
         }

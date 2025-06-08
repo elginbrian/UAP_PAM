@@ -1,10 +1,10 @@
 package com.elginbrian.uappam.presentation.edit_item
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,6 +13,7 @@ import com.elginbrian.uappam.R
 import com.elginbrian.uappam.data.model.Plant
 import com.elginbrian.uappam.util.Resource
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditItemActivity : AppCompatActivity() {
@@ -50,7 +51,8 @@ class EditItemActivity : AppCompatActivity() {
         originalPlantName = intent.getStringExtra(EXTRA_PLANT_NAME)
 
         if (originalPlantName == null) {
-            Toast.makeText(this, "Data tanaman tidak ditemukan", Toast.LENGTH_LONG).show()
+            val rootView = findViewById<View>(R.id.main)
+            Snackbar.make(rootView, "Data tanaman tidak ditemukan", Snackbar.LENGTH_LONG).show()
             finish()
             return
         }
@@ -75,22 +77,25 @@ class EditItemActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
+        val rootView = findViewById<View>(R.id.main)
         viewModel.plantDetails.observe(this) { resource ->
             when (resource) {
-                is Resource.Loading -> Toast.makeText(this, "Memuat data...", Toast.LENGTH_SHORT).show()
+                is Resource.Loading -> Unit
                 is Resource.Success -> resource.data?.let { populateForm(it) }
-                is Resource.Error -> Toast.makeText(this, resource.message, Toast.LENGTH_LONG).show()
+                is Resource.Error -> Snackbar.make(rootView, resource.message ?: "Gagal memuat data", Snackbar.LENGTH_LONG).show()
             }
         }
 
         viewModel.updateStatus.observe(this) { resource ->
             when (resource) {
-                is Resource.Loading -> Toast.makeText(this, "Memperbarui...", Toast.LENGTH_SHORT).show()
+                is Resource.Loading -> Snackbar.make(rootView, "Memperbarui...", Snackbar.LENGTH_SHORT).show()
                 is Resource.Success -> {
-                    Toast.makeText(this, "Data berhasil diperbarui", Toast.LENGTH_LONG).show()
-                    finish()
+                    Snackbar.make(rootView, "Data berhasil diperbarui", Snackbar.LENGTH_LONG).show()
+                    rootView.postDelayed({
+                        finish()
+                    }, 1500)
                 }
-                is Resource.Error -> Toast.makeText(this, "Gagal memperbarui: ${resource.message}", Toast.LENGTH_LONG).show()
+                is Resource.Error -> Snackbar.make(rootView, "Gagal memperbarui: ${resource.message}", Snackbar.LENGTH_LONG).show()
             }
         }
     }
@@ -111,7 +116,8 @@ class EditItemActivity : AppCompatActivity() {
         if (originalPlantName != null) {
             viewModel.updatePlant(originalPlantName!!, newName, newDescription, newPrice)
         } else {
-            Toast.makeText(this, "Nama tanaman asli tidak ditemukan, tidak dapat memperbarui.", Toast.LENGTH_LONG).show()
+            val rootView = findViewById<View>(R.id.main)
+            Snackbar.make(rootView, "Nama tanaman asli tidak ditemukan, tidak dapat memperbarui.", Snackbar.LENGTH_LONG).show()
         }
     }
 }
