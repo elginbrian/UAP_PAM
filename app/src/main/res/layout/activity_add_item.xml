@@ -32,7 +32,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:paddingTop="24dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            >
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_plant_image"
@@ -71,19 +74,6 @@
                         android:layout_height="match_parent"
                         android:background="#80000000"
                         android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_select_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pilih Gambar"
-                        android:textColor="@color/white"
-                        android:backgroundTint="@color/brand_green"
-                        app:cornerRadius="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -178,14 +168,14 @@
             <Button
                 android:id="@+id/btn_add_plant"
                 android:layout_width="0dp"
-                android:layout_height="55dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/button_background_green"
                 android:text="Tambah"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:backgroundTint="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

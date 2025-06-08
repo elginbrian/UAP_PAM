@@ -42,12 +42,12 @@ class MainViewModel(
                         _plants.postValue(Resource.Error("Data tanaman tidak ditemukan."))
                     }
                 } else {
-                    _plants.postValue(Resource.Error("Gagal memuat data: ${response.message()}"))
+                    _plants.postValue(Resource.Error("Gagal memuat data tanaman. Silakan coba lagi."))
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse<List<Plant>>>, t: Throwable) {
-                _plants.postValue(Resource.Error("Terjadi kesalahan jaringan: ${t.message}"))
+                _plants.postValue(Resource.Error("Gagal terhubung ke server. Periksa koneksi internet Anda."))
             }
         })
     }
@@ -62,12 +62,12 @@ class MainViewModel(
                 if (response.isSuccessful) {
                     _deleteStatus.postValue(Resource.Success(response.body()?.message ?: "Tanaman berhasil dihapus"))
                 } else {
-                    _deleteStatus.postValue(Resource.Error("Gagal menghapus tanaman: ${response.message()}"))
+                    _deleteStatus.postValue(Resource.Error("Gagal menghapus tanaman. Silakan coba lagi."))
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse<Any>>, t: Throwable) {
-                _deleteStatus.postValue(Resource.Error("Terjadi kesalahan jaringan: ${t.message}"))
+                _deleteStatus.postValue(Resource.Error("Gagal terhubung ke server. Periksa koneksi internet Anda."))
             }
         })
     }

@@ -35,12 +35,12 @@ class EditItemViewModel(private val plantRepository: PlantRepository) : ViewMode
                         _plantDetails.postValue(Resource.Error("Data tanaman tidak ditemukan."))
                     }
                 } else {
-                    _plantDetails.postValue(Resource.Error("Gagal memuat detail tanaman: ${response.message()}"))
+                    _plantDetails.postValue(Resource.Error("Gagal memuat data tanaman. Silakan coba lagi."))
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse<Plant>>, t: Throwable) {
-                _plantDetails.postValue(Resource.Error("Terjadi kesalahan jaringan: ${t.message}"))
+                _plantDetails.postValue(Resource.Error("Gagal terhubung ke server. Periksa koneksi internet Anda."))
             }
         })
     }
@@ -77,12 +77,12 @@ class EditItemViewModel(private val plantRepository: PlantRepository) : ViewMode
                         _updateStatus.postValue(Resource.Error("Gagal memperbarui: data tidak valid."))
                     }
                 } else {
-                    _updateStatus.postValue(Resource.Error("Gagal memperbarui tanaman: ${response.message()}"))
+                    _updateStatus.postValue(Resource.Error("Gagal memperbarui tanaman. Silakan coba lagi."))
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse<Plant>>, t: Throwable) {
-                _updateStatus.postValue(Resource.Error("Terjadi kesalahan jaringan: ${t.message}"))
+                _updateStatus.postValue(Resource.Error("Gagal terhubung ke server. Periksa koneksi internet Anda."))
             }
         })
     }

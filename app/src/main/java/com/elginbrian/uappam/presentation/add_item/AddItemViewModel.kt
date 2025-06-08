@@ -44,12 +44,12 @@ class AddItemViewModel(private val plantRepository: PlantRepository) : ViewModel
                         _addPlantStatus.postValue(Resource.Error("Gagal menambahkan tanaman: data tidak valid."))
                     }
                 } else {
-                    _addPlantStatus.postValue(Resource.Error("Gagal menambahkan tanaman: ${response.message()}"))
+                    _addPlantStatus.postValue(Resource.Error("Gagal menambahkan tanaman. Silakan coba lagi."))
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse<Plant>>, t: Throwable) {
-                _addPlantStatus.postValue(Resource.Error("Terjadi kesalahan jaringan: ${t.message}"))
+                _addPlantStatus.postValue(Resource.Error("Gagal terhubung ke server. Periksa koneksi internet Anda."))
             }
         })
     }

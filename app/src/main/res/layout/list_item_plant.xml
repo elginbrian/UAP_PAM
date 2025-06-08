@@ -85,7 +85,7 @@
                     android:layout_height="40dp"
                     android:layout_marginStart="4dp"
                     android:layout_weight="1"
-                    android:backgroundTint="#4CAF50"
+                    android:backgroundTint="@color/brand_green"
                     android:text="Detail"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"

@@ -32,7 +32,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:paddingTop="24dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_plant_image"
@@ -165,14 +167,14 @@
             <Button
                 android:id="@+id/btn_update_plant"
                 android:layout_width="0dp"
-                android:layout_height="55dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/button_background_green"
                 android:text="Perbarui"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:backgroundTint="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
