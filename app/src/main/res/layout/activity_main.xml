@@ -8,8 +8,11 @@
     tools:context=".presentation.main.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/layout_background"
+        app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
@@ -47,16 +50,17 @@
             android:id="@+id/rv_plants"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
             android:clipToPadding="false"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
+            android:paddingBottom="16dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_add_list"
-            tools:listitem="@layout/list_item_plant" />
+            tools:listitem="@layout/list_item_plant"
+            android:layoutAnimation="@anim/layout_animation_fall_down"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

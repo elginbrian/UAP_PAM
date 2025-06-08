@@ -41,14 +41,28 @@ class MainActivity : AppCompatActivity() {
 
         val addListButton = findViewById<Button>(R.id.btn_add_list)
         addListButton.setOnClickListener {
-            val intent = Intent(this, AddItemActivity::class.java)
-            startActivity(intent)
+            it.animate()
+                .scaleX(0.95f)
+                .scaleY(0.95f)
+                .setDuration(100)
+                .withEndAction {
+                    it.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(100)
+                        .start()
+
+                    val intent = Intent(this, AddItemActivity::class.java)
+                    startActivity(intent)
+                }
+                .start()
         }
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.fetchPlants()
+        recyclerView.scheduleLayoutAnimation()
     }
 
     private fun setupRecyclerView() {
@@ -73,7 +87,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.plants.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    // Sebaiknya tampilkan ProgressBar
                 }
                 is Resource.Success -> {
                     resource.data?.let { plants ->
@@ -91,12 +104,10 @@ class MainActivity : AppCompatActivity() {
         viewModel.deleteStatus.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    // Bisa menampilkan loading indicator
                 }
                 is Resource.Success -> {
                     Snackbar.make(recyclerView, "Tanaman berhasil dihapus", Snackbar.LENGTH_LONG)
                         .setAction("Urungkan") {
-                            // viewModel.undoDelete()
                         }
                         .show()
                     viewModel.fetchPlants()
