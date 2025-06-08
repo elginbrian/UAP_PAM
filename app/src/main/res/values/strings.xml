@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">UAP PAM</string>
+    <string name="register_disini">Register disini</string>
+    <string name="selamat_datang">Selamat Datang</string>
+    <string name="logo_aplikasi">Logo Aplikasi</string>
+
+    <string name="login">Login</string>
+    <string name="belum_punya_akun">Belum punya akun? </string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="email_hint">Masukkan email Anda</string>
+    <string name="password_hint">Masukkan password Anda</string>
+
+    <string name="register">Register</string>
+    <string name="konfirmasi_password">Konfirmasi Password</string>
+    <string name="konfirmasi_password_hint">Konfirmasi password Anda</string>
+
+    <string name="app_name_toolbar">GreenFresh</string>
+    <string name="tambah_list">Tambah List</string>
+    <string name="hapus">Hapus</string>
+    <string name="detail">Detail</string>
+</resources>
