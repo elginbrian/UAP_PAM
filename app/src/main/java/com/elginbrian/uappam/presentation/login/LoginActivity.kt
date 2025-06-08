@@ -2,29 +2,78 @@ package com.elginbrian.uappam.presentation.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.elginbrian.uappam.presentation.main.MainActivity
 import com.elginbrian.uappam.R
+import com.elginbrian.uappam.util.Resource
+import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
+
+    private val viewModel: LoginViewModel by viewModel()
+
+    private lateinit var etEmail: EditText
+    private lateinit var etPass: EditText
+    private lateinit var btnLogin: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.iv_logo)) { v, insets ->
+        val mainView = findViewById<View>(R.id.iv_logo)
+        ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        val loginButton = findViewById<Button>(R.id.btn_login)
-        loginButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        initViews()
+        observeViewModel()
+
+        btnLogin.setOnClickListener {
+            handleLogin()
         }
+    }
+
+    private fun initViews() {
+        etEmail = findViewById(R.id.et_email)
+        etPass = findViewById(R.id.et_password)
+        btnLogin = findViewById(R.id.btn_login)
+    }
+
+    private fun observeViewModel() {
+        val rootView = findViewById<View>(android.R.id.content)
+        viewModel.loginStatus.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    Snackbar.make(rootView, "Logging in...", Snackbar.LENGTH_SHORT).show()
+                }
+                is Resource.Success -> {
+                    Snackbar.make(rootView, "Login berhasil!", Snackbar.LENGTH_LONG).show()
+                    rootView.postDelayed({
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                    }, 1500)
+                }
+                is Resource.Error -> {
+                    Snackbar.make(rootView, "Gagal: ${resource.message}", Snackbar.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun handleLogin() {
+        val email = etEmail.text.toString().trim()
+        val password = etPass.text.toString().trim()
+
+        viewModel.login(email, password)
     }
 }
