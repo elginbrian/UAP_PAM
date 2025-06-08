@@ -3,6 +3,7 @@ package com.elginbrian.uappam.presentation.detail
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -44,6 +45,7 @@ class DetailActivity : AppCompatActivity() {
         }
 
         initViews()
+        applyAnimations()
 
         topAppBar.setNavigationOnClickListener {
             finish()
@@ -78,12 +80,21 @@ class DetailActivity : AppCompatActivity() {
         topAppBar = findViewById(R.id.topAppBar)
     }
 
+    private fun applyAnimations() {
+        val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
+        ivPlantDetail.startAnimation(fadeIn)
+        tvPlantName.startAnimation(fadeIn)
+        tvPlantPrice.startAnimation(fadeIn)
+        tvPlantDescription.startAnimation(fadeIn)
+        btnUpdate.startAnimation(fadeIn)
+    }
+
     private fun observePlantDetails() {
         val rootView = findViewById<View>(R.id.coordinator_layout)
         viewModel.plantDetails.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    // Sebaiknya tampilkan ProgressBar di layout
+
                 }
                 is Resource.Success -> {
                     resource.data?.let { plant ->

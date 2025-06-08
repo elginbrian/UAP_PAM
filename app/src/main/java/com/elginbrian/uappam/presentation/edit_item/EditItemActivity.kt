@@ -2,9 +2,11 @@ package com.elginbrian.uappam.presentation.edit_item
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -31,6 +33,9 @@ class EditItemActivity : AppCompatActivity() {
     private lateinit var etPlantDescription: EditText
     private lateinit var btnUpdatePlant: Button
     private lateinit var topAppBar: MaterialToolbar
+    private lateinit var tvPlantNameLabel: TextView
+    private lateinit var tvPlantPriceLabel: TextView
+    private lateinit var tvPlantDescriptionLabel: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +48,7 @@ class EditItemActivity : AppCompatActivity() {
         }
 
         initViews()
+        applyAnimations()
 
         topAppBar.setNavigationOnClickListener {
             finish()
@@ -74,6 +80,21 @@ class EditItemActivity : AppCompatActivity() {
         etPlantDescription = findViewById(R.id.et_plant_description)
         btnUpdatePlant = findViewById(R.id.btn_update_plant)
         topAppBar = findViewById(R.id.topAppBar)
+        tvPlantNameLabel = findViewById(R.id.tv_plant_name_label)
+        tvPlantPriceLabel = findViewById(R.id.tv_plant_price_label)
+        tvPlantDescriptionLabel = findViewById(R.id.tv_plant_description_label)
+    }
+
+    private fun applyAnimations() {
+        val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
+        ivPlantImage.startAnimation(fadeIn)
+        tvPlantNameLabel.startAnimation(fadeIn)
+        etPlantName.startAnimation(fadeIn)
+        tvPlantPriceLabel.startAnimation(fadeIn)
+        etPlantPrice.startAnimation(fadeIn)
+        tvPlantDescriptionLabel.startAnimation(fadeIn)
+        etPlantDescription.startAnimation(fadeIn)
+        btnUpdatePlant.startAnimation(fadeIn)
     }
 
     private fun observeViewModel() {

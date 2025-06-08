@@ -3,9 +3,13 @@ package com.elginbrian.uappam.presentation.register
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -25,6 +29,9 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var etConfirmPass: EditText
     private lateinit var btnRegister: Button
     private lateinit var progressBar: ProgressBar
+    private lateinit var ivLogo: ImageView
+    private lateinit var tvRegisterTitle: TextView
+    private lateinit var formContainer: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +45,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         initViews()
+        applyAnimations()
         observeViewModel()
 
         btnRegister.setOnClickListener {
@@ -51,6 +59,16 @@ class RegisterActivity : AppCompatActivity() {
         etConfirmPass = findViewById(R.id.et_confirm_password)
         btnRegister = findViewById(R.id.btn_register)
         progressBar = findViewById(R.id.progress_bar)
+        ivLogo = findViewById(R.id.iv_logo)
+        tvRegisterTitle = findViewById(R.id.tv_register_title)
+        formContainer = findViewById(R.id.form_container)
+    }
+
+    private fun applyAnimations() {
+        val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
+        ivLogo.startAnimation(fadeIn)
+        tvRegisterTitle.startAnimation(fadeIn)
+        formContainer.startAnimation(fadeIn)
     }
 
     private fun observeViewModel() {

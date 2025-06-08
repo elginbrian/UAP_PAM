@@ -3,9 +3,12 @@ package com.elginbrian.uappam.presentation.login
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -24,6 +27,10 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var etPass: EditText
     private lateinit var btnLogin: Button
     private lateinit var progressBar: ProgressBar
+    private lateinit var ivLogo: ImageView
+    private lateinit var tvLoginTitle: TextView
+    private lateinit var tvEmailLabel: TextView
+    private lateinit var tvPasswordLabel: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         initViews()
+        applyAnimations()
         observeViewModel()
 
         btnLogin.setOnClickListener {
@@ -49,6 +57,21 @@ class LoginActivity : AppCompatActivity() {
         etPass = findViewById(R.id.et_password)
         btnLogin = findViewById(R.id.btn_login)
         progressBar = findViewById(R.id.progress_bar)
+        ivLogo = findViewById(R.id.iv_logo)
+        tvLoginTitle = findViewById(R.id.tv_login_title)
+        tvEmailLabel = findViewById(R.id.tv_email_label)
+        tvPasswordLabel = findViewById(R.id.tv_password_label)
+    }
+
+    private fun applyAnimations() {
+        val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
+        ivLogo.startAnimation(fadeIn)
+        tvLoginTitle.startAnimation(fadeIn)
+        tvEmailLabel.startAnimation(fadeIn)
+        etEmail.startAnimation(fadeIn)
+        tvPasswordLabel.startAnimation(fadeIn)
+        etPass.startAnimation(fadeIn)
+        btnLogin.startAnimation(fadeIn)
     }
 
     private fun observeViewModel() {

@@ -1,6 +1,9 @@
 package com.elginbrian.uappam.presentation.main
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -164,28 +167,48 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showDeleteConfirmationDialog(plant: Plant) {
-        AlertDialog.Builder(this)
-            .setTitle("Hapus Tanaman")
-            .setMessage("Apakah Anda yakin ingin menghapus ${plant.plantName}?")
-            .setPositiveButton("Hapus") { _, _ ->
-                viewModel.deletePlant(plant.plantName)
-            }
-            .setNegativeButton("Batal", null)
-            .show()
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_custom_delete)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val message = dialog.findViewById<TextView>(R.id.tv_dialog_message)
+        val btnCancel = dialog.findViewById<Button>(R.id.btn_dialog_cancel)
+        val btnDelete = dialog.findViewById<Button>(R.id.btn_dialog_delete)
+
+        message.text = "Apakah Anda yakin ingin menghapus ${plant.plantName}?"
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnDelete.setOnClickListener {
+            viewModel.deletePlant(plant.plantName)
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun showLogoutConfirmationDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("Logout")
-            .setMessage("Apakah Anda yakin ingin keluar?")
-            .setPositiveButton("Logout") { _, _ ->
-                viewModel.logout()
-                val intent = Intent(this, OnboardingActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
-            }
-            .setNegativeButton("Batal", null)
-            .show()
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_custom_logout)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val btnCancel = dialog.findViewById<Button>(R.id.btn_dialog_cancel)
+        val btnLogout = dialog.findViewById<Button>(R.id.btn_dialog_logout)
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnLogout.setOnClickListener {
+            dialog.dismiss()
+            viewModel.logout()
+            val intent = Intent(this, OnboardingActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+        dialog.show()
     }
 }

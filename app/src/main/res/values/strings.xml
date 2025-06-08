@@ -20,6 +20,9 @@
     <string name="hapus">Hapus</string>
     <string name="detail">Detail</string>
     <string name="update">Update</string>
+    <string name="batal">Batal</string>
+    <string name="logout_title">Logout</string>
+    <string name="logout_confirmation">Apakah Anda yakin ingin keluar?</string>
 
     <string name="pilih_gambar">Pilih Gambar</string>
     <string name="tambah">Tambah</string>

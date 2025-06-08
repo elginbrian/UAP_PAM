@@ -2,7 +2,10 @@ package com.elginbrian.uappam.presentation.onboarding
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -35,8 +38,18 @@ class OnboardingActivity : AppCompatActivity() {
             insets
         }
 
+        val tvWelcome = findViewById<TextView>(R.id.tv_welcome)
+        val ivLogo = findViewById<ImageView>(R.id.iv_logo)
         val loginButton = findViewById<Button>(R.id.btn_login)
         val registerLink = findViewById<TextView>(R.id.tv_register_link)
+        val registerLayout = findViewById<LinearLayout>(R.id.layout_register)
+
+        val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
+        tvWelcome.startAnimation(fadeIn)
+        ivLogo.startAnimation(fadeIn)
+        loginButton.startAnimation(fadeIn)
+        registerLayout.startAnimation(fadeIn)
+
 
         loginButton.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
