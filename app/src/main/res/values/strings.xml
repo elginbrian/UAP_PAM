@@ -19,4 +19,5 @@
     <string name="tambah_list">Tambah List</string>
     <string name="hapus">Hapus</string>
     <string name="detail">Detail</string>
+    <string name="update">Update</string>
 </resources>
