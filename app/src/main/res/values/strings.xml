@@ -20,4 +20,7 @@
     <string name="hapus">Hapus</string>
     <string name="detail">Detail</string>
     <string name="update">Update</string>
+
+    <string name="pilih_gambar">Pilih Gambar</string>
+    <string name="tambah">Tambah</string>
 </resources>
