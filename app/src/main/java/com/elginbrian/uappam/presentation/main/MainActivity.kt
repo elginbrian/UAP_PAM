@@ -4,12 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elginbrian.uappam.R
@@ -27,6 +29,10 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModel()
     private lateinit var plantAdapter: PlantAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var errorLayout: LinearLayout
+    private lateinit var tvErrorMessage: TextView
+    private lateinit var btnRetry: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         val topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
         setSupportActionBar(topAppBar)
 
-        recyclerView = findViewById(R.id.rv_plants)
+        initViews()
         setupRecyclerView()
         observePlants()
         observeDeleteStatus()
@@ -59,6 +65,18 @@ class MainActivity : AppCompatActivity() {
                 }
                 .start()
         }
+
+        btnRetry.setOnClickListener {
+            viewModel.fetchPlants()
+        }
+    }
+
+    private fun initViews() {
+        recyclerView = findViewById(R.id.rv_plants)
+        progressBar = findViewById(R.id.progress_bar)
+        errorLayout = findViewById(R.id.error_layout)
+        tvErrorMessage = findViewById(R.id.tv_error_message)
+        btnRetry = findViewById(R.id.btn_retry)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -69,10 +87,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                viewModel.logout()
-                val intent = Intent(this, OnboardingActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+                showLogoutConfirmationDialog()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -82,7 +97,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.fetchPlants()
-        recyclerView.scheduleLayoutAnimation()
     }
 
     private fun setupRecyclerView() {
@@ -107,14 +121,24 @@ class MainActivity : AppCompatActivity() {
         viewModel.plants.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
+                    progressBar.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+                    errorLayout.visibility = View.GONE
                 }
                 is Resource.Success -> {
+                    progressBar.visibility = View.GONE
+                    errorLayout.visibility = View.GONE
+                    recyclerView.visibility = View.VISIBLE
                     resource.data?.let { plants ->
                         plantAdapter.submitList(plants)
+                        recyclerView.scheduleLayoutAnimation()
                     }
                 }
                 is Resource.Error -> {
-                    Snackbar.make(recyclerView, resource.message ?: "Gagal memuat data", Snackbar.LENGTH_LONG).show()
+                    progressBar.visibility = View.GONE
+                    recyclerView.visibility = View.GONE
+                    errorLayout.visibility = View.VISIBLE
+                    tvErrorMessage.text = resource.message ?: "Gagal memuat data"
                 }
             }
         }
@@ -145,6 +169,21 @@ class MainActivity : AppCompatActivity() {
             .setMessage("Apakah Anda yakin ingin menghapus ${plant.plantName}?")
             .setPositiveButton("Hapus") { _, _ ->
                 viewModel.deletePlant(plant.plantName)
+            }
+            .setNegativeButton("Batal", null)
+            .show()
+    }
+
+    private fun showLogoutConfirmationDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Apakah Anda yakin ingin keluar?")
+            .setPositiveButton("Logout") { _, _ ->
+                viewModel.logout()
+                val intent = Intent(this, OnboardingActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
             }
             .setNegativeButton("Batal", null)
             .show()

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -22,6 +23,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var etEmail: EditText
     private lateinit var etPass: EditText
     private lateinit var btnLogin: Button
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
         etEmail = findViewById(R.id.et_email)
         etPass = findViewById(R.id.et_password)
         btnLogin = findViewById(R.id.btn_login)
+        progressBar = findViewById(R.id.progress_bar)
     }
 
     private fun observeViewModel() {
@@ -53,9 +56,12 @@ class LoginActivity : AppCompatActivity() {
         viewModel.loginStatus.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    Snackbar.make(rootView, "Logging in...", Snackbar.LENGTH_SHORT).show()
+                    progressBar.visibility = View.VISIBLE
+                    btnLogin.isEnabled = false
                 }
                 is Resource.Success -> {
+                    progressBar.visibility = View.GONE
+                    btnLogin.isEnabled = true
                     Snackbar.make(rootView, "Login berhasil!", Snackbar.LENGTH_LONG).show()
                     rootView.postDelayed({
                         val intent = Intent(this, MainActivity::class.java)
@@ -64,6 +70,8 @@ class LoginActivity : AppCompatActivity() {
                     }, 1500)
                 }
                 is Resource.Error -> {
+                    progressBar.visibility = View.GONE
+                    btnLogin.isEnabled = true
                     Snackbar.make(rootView, "Gagal: ${resource.message}", Snackbar.LENGTH_LONG).show()
                 }
             }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,12 +24,13 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var etPass: EditText
     private lateinit var etConfirmPass: EditText
     private lateinit var btnRegister: Button
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
-        val mainView = findViewById<View>(R.id.form_container)
+        val mainView = findViewById<View>(R.id.main)
         ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -48,6 +50,7 @@ class RegisterActivity : AppCompatActivity() {
         etPass = findViewById(R.id.et_password)
         etConfirmPass = findViewById(R.id.et_confirm_password)
         btnRegister = findViewById(R.id.btn_register)
+        progressBar = findViewById(R.id.progress_bar)
     }
 
     private fun observeViewModel() {
@@ -55,9 +58,12 @@ class RegisterActivity : AppCompatActivity() {
         viewModel.registerStatus.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    Snackbar.make(rootView, "Mendaftarkan...", Snackbar.LENGTH_SHORT).show()
+                    progressBar.visibility = View.VISIBLE
+                    btnRegister.isEnabled = false
                 }
                 is Resource.Success -> {
+                    progressBar.visibility = View.GONE
+                    btnRegister.isEnabled = true
                     Snackbar.make(rootView, "Registrasi berhasil! Silakan login.", Snackbar.LENGTH_LONG).show()
                     rootView.postDelayed({
                         val intent = Intent(this, LoginActivity::class.java)
@@ -66,6 +72,8 @@ class RegisterActivity : AppCompatActivity() {
                     }, 1500)
                 }
                 is Resource.Error -> {
+                    progressBar.visibility = View.GONE
+                    btnRegister.isEnabled = true
                     Snackbar.make(rootView, "Gagal: ${resource.message}", Snackbar.LENGTH_LONG).show()
                 }
             }
